@@ -1,11 +1,19 @@
 void main() {
-  String cardNumber = '4916 6418 5936 9080'; // Cartão válido
-  // String cardNumber = '5419 8250 0346 1210';  // Cartão inválido
-  cardNumber = cardNumber.replaceAll(' ', '');
-  print(validarCartao(cardNumber));
+  List<String> cards = [
+    '4916 6418 5936 9080', //cartão válido
+    '5419 8250 0346 1210', //cartão inválido
+    '5486-3656-8140-9495', //cartão válido
+  ];
+
+  for (final card in cards) {
+    print('Cartão $card é ${validarCartao(card) ? 'válido' : 'inválido'}');
+  }
 }
 
-String validarCartao(String cardNumber) {
+bool validarCartao(String number) {
+  final cardNumber =
+      number.replaceAll(' ', '').replaceAll('-', '').replaceAll('.', '');
+
   int resultado = 0;
   int ultimoDigito = int.parse(cardNumber[cardNumber.length - 1]);
 
@@ -27,8 +35,8 @@ String validarCartao(String cardNumber) {
   int resultadoFinal = (10 - resto) % 10;
 
   if (resultadoFinal == ultimoDigito) {
-    return 'Cartão Válido';
+    return true;
   } else {
-    return 'Cartão Inválido';
+    return false;
   }
 }

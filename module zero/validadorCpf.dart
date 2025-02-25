@@ -1,24 +1,37 @@
 void main() {
-  String cpf = '136.096.586-65';
+  List<String> cpfs = [
+    '136.096.586-65', //válido
+    '111.111.111-11', //inválido
+    '123.456.789.09', //válido
+    '136.096.586-05', //inválido
+    '136.096.586-60', //inválido
+  ];
 
-  List<int> numeros = functionCpf(cpf);
-
-  int primeiroDigito = calcularDigito(numeros, 9);
-  print('Primeiro Dígito é $primeiroDigito.');
-
-  int segundoDigito = calcularDigito(numeros, 10);
-  print('Segundo Dígito é $segundoDigito.');
-}
-
-List<int> functionCpf(String cpf) {
-  cpf = cpf.replaceAll('.', '').replaceAll('-', '');
-  if (cpf.length != 11) {
-    print('CPF inválido');
+  for (final cpf in cpfs) {
+    print('CPF: $cpf é ${validateCpf(cpf) ? 'válido' : 'inválido'}');
   }
-  return cpf.split('').map((e) => int.parse(e)).toList();
 }
 
-int calcularDigito(List<int> numeros, int comprimento) {
+bool validateCpf(String cpf) {
+  cpf = cpf.replaceAll('.', '').replaceAll('-', '');
+  if (cpf.length != 11 || cpf == '11111111111') {
+    return false;
+  }
+  final numeros = cpf.split('').map((e) => int.parse(e)).toList();
+
+  int primeiroDigito = _calcularDigito(numeros, 9);
+  if (primeiroDigito != numeros[9]) {
+    return false;
+  }
+
+  int segundoDigito = _calcularDigito(numeros, 10);
+  if (segundoDigito != numeros[10]) {
+    return false;
+  }
+  return true;
+}
+
+int _calcularDigito(List<int> numeros, int comprimento) {
   int soma = 0;
   int multiplicador = 2;
 
