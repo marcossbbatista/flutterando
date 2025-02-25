@@ -1,23 +1,22 @@
 void main() {
-  var marcos = people('Marcos', 25, 1.70, 60);
-  marcos.imc();
+  var marcos = People(name: 'Marcos', age: 25, height: 1.70, weight: 58.51);
+  print('IMC de ${marcos.name}: ${marcos.imc().toStringAsFixed(2)} kg/m²');
 }
 
-class people {
+class People {
   String name;
   int age;
   double height;
   double weight;
 
-  people(
-    this.name,
-    this.age,
-    this.height,
-    this.weight,
-  );
+  People({
+    required this.name,
+    required this.age,
+    required this.height,
+    required this.weight,
+  });
 
-  imc() {
-    double valor = weight / (height * height);
-    return print('IMC de $name: $valor');
+  double imc() {
+    return weight / (height * height);
   }
 }
