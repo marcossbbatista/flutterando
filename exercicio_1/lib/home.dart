@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,60 +13,90 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    int opcaoSelecionada = 1;
+    String? _selectedGender;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Employee Details',
-          style: TextStyle(fontStyle: FontStyle.italic),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          spacing: 12,
-          children: [
-            RowTextField(title: 'First Name:'),
-            RowTextField(title: 'Last Name:'),
-            /*Row(
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.all(20),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(border: Border.all()),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 20,
               children: [
-                RadioListTile<int>(
-                  title: Text('Male'),
-                  value: 1,
-                  groupValue: opcaoSelecionada,
-                  onChanged: (value) {
-                    setState(() {
-                      opcaoSelecionada = value!;
-                    });
-                  },
+                RowClass(label: 'First Name:'),
+                RowClass(label: 'Last Name:'),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 160,
+                      child: RadioListTile<String>(
+                        title: Text("Male", style: TextStyle(fontSize: 14)),
+                        value: "Male",
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 160,
+                      child: RadioListTile<String>(
+                        title: Text("Female", style: TextStyle(fontSize: 14)),
+                        value: "Female",
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                RadioListTile<int>(
-                  title: Text('Female'),
-                  value: 2,
-                  groupValue: opcaoSelecionada,
-                  onChanged: (value) {
-                    setState(() {
-                      opcaoSelecionada = value!;
-                    });
-                  },
+                RowClass(label: 'Employee ID:'),
+                RowClass(label: 'Designation:'),
+                RowClass(label: 'Phone Number:'),
+                SizedBox(width: 160),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(border: Border.all()),
+                  child: Text('Submit'),
                 ),
               ],
-            ),*/
-            RowTextField(title: 'Employee ID:'),
-            RowTextField(title: 'Designation:'),
-            RowTextField(title: 'Phone Number:'),
-          ],
-        ),
+            ),
+          ),
+          Positioned(
+            top: 2,
+            left: 24,
+            child: Container(
+              color: Colors.white,
+              child: Text('Employee Details', style: TextStyle(fontSize: 18)),
+            ),
+          ),
+        ],
       ),
     );
   }
+}
 
-  Row RowTextField({required String title}) {
+class RowClass extends StatelessWidget {
+  final String label;
+  const RowClass({super.key, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
-      spacing: 8,
       children: [
-        Text(title, style: TextStyle(fontSize: 18)),
-        Expanded(
+        SizedBox(width: 10, height: 10),
+        Text(label),
+        SizedBox(
+          width: 160,
+          height: 20,
           child: TextField(
             decoration: InputDecoration(border: OutlineInputBorder()),
           ),
