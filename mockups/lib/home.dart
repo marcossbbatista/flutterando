@@ -8,8 +8,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  static const basicColor = Color(0XFF4D59FF);
+
   @override
   Widget build(BuildContext context) {
+    final size = 60.0;
+    final spacing = size * .1;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
@@ -23,33 +27,33 @@ class _HomeState extends State<Home> {
                 spacing: 10,
                 children: [
                   Container(
-                    height: 100,
-                    width: 100,
+                    height: size,
+                    width: size,
                     decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent,
+                      color: basicColor,
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
                   Container(
-                    height: 100,
-                    width: 100,
+                    height: size,
+                    width: size,
                     decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent,
+                      color: basicColor,
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(100),
+                        bottomLeft: Radius.circular(size),
                       ),
                     ),
                   ),
                 ],
               ),
               Container(
-                height: 210,
-                width: 100,
+                height: 2 * size + spacing,
+                width: size,
                 decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
+                  color: basicColor,
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(100),
-                    bottomLeft: Radius.circular(100),
+                    topRight: Radius.circular(size),
+                    bottomLeft: Radius.circular(size),
                   ),
                 ),
               ),
@@ -101,13 +105,14 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+          SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               width: double.infinity,
               height: 64,
               decoration: BoxDecoration(
-                color: Colors.deepPurpleAccent,
+                color: basicColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
@@ -150,6 +155,32 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 26),
+            child: Row(
+              spacing: 8,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Already have an account?',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Sign In',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
