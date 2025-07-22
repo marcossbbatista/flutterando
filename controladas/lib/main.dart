@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Home());
-  }
+  runApp(MaterialApp(home: Home(), debugShowCheckedModeBanner: false));
 }
 
 class Home extends StatefulWidget {
@@ -20,26 +11,49 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  bool _isExpanded = false;
-  double _width = 60;
-  double _borderRadius = 30;
-  Alignment _alignment = Alignment.bottomRight;
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late Animation<double> _widthAnimation;
+  late Animation<double> _radiusAnimation;
+  bool _animated = false;
 
-  void _toggleButton() {
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+    _animationController.addListener(() {
+      setState(() {});
+    });
+
+    _widthAnimation = Tween<double>(
+      begin: 60,
+      end: 100,
+    ).animate(_animationController);
+
+    _radiusAnimation = Tween<double>(
+      begin: 30,
+      end: 0,
+    ).animate(_animationController);
+  }
+
+  void _toggleAnimation() {
     setState(() {
-      _isExpanded = !_isExpanded;
-
-      if (_isExpanded) {
-        _width = 100;
-        _borderRadius = 0;
-        _alignment = Alignment.topCenter;
+      _animated = !_animated;
+      if (_animated) {
+        _animationController.forward();
       } else {
-        _width = 60;
-        _borderRadius = 30;
-        _alignment = Alignment.bottomRight;
+        _animationController.reverse();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,7 +62,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          'Botão Animado',
+          'Desafio do Botão Flutuante',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -56,18 +70,18 @@ class _HomeState extends State<Home> {
         children: [
           AnimatedAlign(
             duration: const Duration(milliseconds: 1500),
-            alignment: _alignment,
+            alignment: _animated ? Alignment.topCenter : Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
-                onTap: _toggleButton,
+                onTap: _toggleAnimation,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 1500),
-                  width: _width,
+                  width: _widthAnimation.value,
                   height: 60,
                   decoration: BoxDecoration(
                     color: Colors.blue,
-                    borderRadius: BorderRadius.circular(_borderRadius),
+                    borderRadius: BorderRadius.circular(_radiusAnimation.value),
                   ),
                 ),
               ),
