@@ -9,8 +9,46 @@ class MyExpansionTile extends StatefulWidget {
   State<MyExpansionTile> createState() => _MyExpansionTileState();
 }
 
-class _MyExpansionTileState extends State<MyExpansionTile> {
-  bool isExpanded = false;
+class _MyExpansionTileState extends State<MyExpansionTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  bool _isExpanded = false;
+  late Animation<double> _turnAnimation;
+  late Animation<double> _heightFactorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _turnAnimation = Tween<double>(begin: 0.0, end: 0.5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+
+    _heightFactorAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  void _toggleExpansion() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +56,16 @@ class _MyExpansionTileState extends State<MyExpansionTile> {
       children: [
         ListTile(
           title: Text('My expansion tile ${widget.index}'),
-          trailing: AnimatedRotation(
-            turns: isExpanded ? 0.5 : 0.0,
-            duration: const Duration(milliseconds: 200),
+          trailing: RotationTransition(
+            turns: _turnAnimation,
             child: const Icon(Icons.expand_more),
           ),
-          onTap: () => setState(() => isExpanded = !isExpanded),
+          onTap: _toggleExpansion,
         ),
         ClipRect(
-          child: AnimatedAlign(
+          child: Align(
             alignment: Alignment.topCenter,
-            heightFactor: isExpanded ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 200),
+            heightFactor: _heightFactorAnimation.value,
             child: Column(
               children: [
                 const FlutterLogo(size: 40),
